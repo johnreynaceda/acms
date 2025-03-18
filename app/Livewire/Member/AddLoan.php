@@ -119,7 +119,7 @@ class AddLoan extends Component implements HasForms
                         Fieldset::make('Expense')->schema([
                             TextInput::make('total_expense')->numeric()->prefix('PHP'),
                         ]),
-                        TextInput::make('total_uncommited_income')->numeric()->prefix('PHP'),
+                        TextInput::make('total_uncommitted_income')->numeric()->prefix('PHP'),
                     ])->columns(2),
                 Section::make('IV. LOAN PURPOSE')
                     ->schema([
@@ -151,7 +151,7 @@ class AddLoan extends Component implements HasForms
                     ])->columns(2),
                 Section::make('V. CREDIT INFORMATION')
                     ->schema([
-                        Repeater::make('business')->label('')
+                        Repeater::make('credit')->label('')
                             ->schema([
                                 TextInput::make('creditor')->label('Creditor/Supplier')->required(),
                                 TextInput::make('loan_amount')->required(),
@@ -237,6 +237,12 @@ class AddLoan extends Component implements HasForms
             if ($this->microfinance) {
                 $info->update([
                     'microfinance' => json_encode($this->microfinance),
+                ]);
+            }
+
+            if ($this->farming) {
+                $info->update([
+                    'farming' => json_encode($this->farming),
                 ]);
             }
 

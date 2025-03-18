@@ -130,12 +130,159 @@
                 </div>
                 <div x-show="tab==='tab2'" class="text-base-500" style="display: none">
                     <main class="py-4">
-                        <p class="text-base-500 text-sm">Application content</p>
+                        <div class="grid grid-cols-5 gap-5">
+                            <div class="col-span-5">
+                                <h1 class="font-bold text-main">A. Business</h1>
+                            </div>
+                            @foreach (json_decode($getRecord()->loanInfo->business, true) as $item)
+                                <div>
+                                    <h1 class="text-sm">Type of Business</h1>
+                                    <h1 class="font-semibold uppercase">{{ $item['type_of_business'] }}</h1>
+                                </div>
+                                <div>
+                                    <h1 class="text-sm">Year in Business</h1>
+                                    <h1 class="font-semibold uppercase">{{ $item['years_in_business'] }}</h1>
+                                </div>
+                                <div>
+                                    <h1 class="text-sm">No. of Paid Employees</h1>
+                                    <h1 class="font-semibold uppercase">{{ $item['no_of_paid_employees'] }}</h1>
+                                </div>
+                                <div class="col-span-2">
+                                    <h1 class="text-sm">Workplace Characteristics</h1>
+                                    <h1 class="font-semibold uppercase">{{ $item['workplace_characteristics'] }}</h1>
+                                </div>
+                                <div class="col-span-5">
+                                    <h1 class="font-semibold text-main">Amount Requested</h1>
+                                </div>
+                                <div>
+                                    <h1 class="text-sm">Loan Amount</h1>
+                                    <h1 class="font-semibold uppercase">
+                                        &#8369; {{ number_format($getRecord()->loan_amount, 2) }}
+                                    </h1>
+                                </div>
+                            @endforeach
+
+                            {{-- @dump(json_decode($getRecord()->loanInfo->business)) --}}
+                            <div>
+                                <h1 class="text-sm">Term</h1>
+                                <h1 class="font-semibold uppercase">{{ $getRecord()->term }}
+                                </h1>
+                            </div>
+
+                        </div>
                     </main>
                 </div>
                 <div x-show="tab==='tab3'" class="text-base-500" style="display: none">
                     <main class="py-4">
-                        <p class="text-base-500 text-sm">ECommerce content</p>
+                        <div class="grid grid-cols-5 gap-5">
+                            <div class="col-span-5">
+                                <h1 class="font-semibold text-main">Basic Monthly Income</h1>
+                            </div>
+                            <div>
+                                <h1 class="text-sm">Gross</h1>
+                                <h1 class="font-semibold uppercase">{{ $getRecord()->loanInfo->gross_income }}
+                                </h1>
+                            </div>
+                            <div>
+                                <h1 class="text-sm">Spouse</h1>
+                                <h1 class="font-semibold uppercase">{{ $getRecord()->loanInfo->spouse_income }}
+                                </h1>
+                            </div>
+                            <div class="col-span-5">
+                                <h1 class="font-semibold text-main">Expense</h1>
+                            </div>
+                            <div>
+                                <h1 class="text-sm">Total Expense</h1>
+                                <h1 class="font-semibold uppercase">{{ $getRecord()->loanInfo->total_expense }}
+                                </h1>
+                            </div>
+                            <div class="col-span-2">
+                                <h1 class="text-sm">Total Uncommited Income</h1>
+                                <h1 class="font-semibold uppercase">
+                                    {{ $getRecord()->loanInfo->total_uncommitted_income }}
+                                </h1>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+
+                <div x-show="tab==='tab4'" class="text-base-500" style="display: none">
+                    <main class="py-4">
+                        <div class="grid grid-cols-5 gap-5">
+                            <div class="col-span-5">
+                                <h1 class="font-semibold text-main">Agriculture</h1>
+                            </div>
+                            <div>
+                                <h1 class="text-sm"></h1>
+                                <h1 class="font-semibold uppercase">
+                                    {{ implode(',', json_decode($getRecord()->loanInfo->agriculture)) }}
+                                </h1>
+                            </div>
+
+                            <div class="col-span-5">
+                                <h1 class="font-semibold text-main">Microfinance</h1>
+                            </div>
+                            <div>
+                                <h1 class="text-sm"></h1>
+                                <h1 class="font-semibold uppercase">
+                                    {{ implode(',', json_decode($getRecord()->loanInfo->agriculture)) }}
+                                </h1>
+                            </div>
+
+                        </div>
+                    </main>
+                </div>
+                <div x-show="tab==='tab5'" class="text-base-500" style="display: none">
+                    <main class="py-4">
+                        <div class="grid grid-cols-5 gap-5">
+
+                            @if ($getRecord()->loanInfo->farming != null)
+                                @forelse (json_decode($getRecord()->loanInfo->farming, true) as $item)
+                                    <div>
+                                        <h1 class="text-sm">Creditor/Supplier</h1>
+                                        <h1 class="font-semibold uppercase">{{ $item['creditor'] ?? 'N/A' }}</h1>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-sm">Loan Amount</h1>
+                                        <h1 class="font-semibold uppercase">
+                                            &#8369;{{ number_format($item['loan_amount'] ?? 0, 2) }}
+                                        </h1>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-sm">Outstanding Loan Balance</h1>
+                                        <h1 class="font-semibold uppercase">
+                                            &#8369;{{ number_format($item['outstanding_loan_balance'] ?? 0, 2) }}
+                                        </h1>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-sm">Term</h1>
+                                        <h1 class="font-semibold uppercase">{{ $item['term'] ?? 'N/A' }}</h1>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-sm">Maturity Date</h1>
+                                        <h1 class="font-semibold uppercase">{{ $item['maturity_date'] ?? 'N/A' }}</h1>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-sm">Installment/Frequency</h1>
+                                        <h1 class="font-semibold uppercase">{{ $item['installment'] ?? 'N/A' }}</h1>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-sm">Amount</h1>
+                                        <h1 class="font-semibold uppercase">
+                                            &#8369;{{ number_format($item['amount'] ?? 0, 2) }}
+                                        </h1>
+                                    </div>
+                                @empty
+                                    <p>null</p>
+                                @endforelse
+                            @endif
+
+                        </div>
+                    </main>
+                </div>
+                <div x-show="tab==='tab6'" class="text-base-500" style="display: none">
+                    <main class="py-4">
+                        <img src="" class="w-full h-auto" alt="">
                     </main>
                 </div>
             </div>
