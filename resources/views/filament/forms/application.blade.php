@@ -29,6 +29,11 @@
                         CREDIT INFO.</a>
                 </li>
                 <li class="-mb-px">
+                    <a @click.prevent="tab = 'tab7'" href="#_" class="inline-block py-2 font-medium"
+                        :class="{ ' bg-white text-accent-500 border-b-2 border-main': tab === 'tab7' }">
+                        COLLATERAL INFO.</a>
+                </li>
+                <li class="-mb-px">
                     <a @click.prevent="tab = 'tab6'" href="#_" class="inline-block py-2 font-medium"
                         :class="{ ' bg-white text-accent-500 border-b-2 border-main': tab === 'tab6' }">
                         HOUSE SKETCH</a>
@@ -170,6 +175,52 @@
                             </div>
 
                         </div>
+
+                        <main class="py-4">
+                            <h2 class="text-lg font-bold">Employment Details</h2>
+
+                            @php
+                                // Decode employment JSON safely
+                                $employment = optional($getRecord())->loanInfo->employment
+                                    ? json_decode($getRecord()->loanInfo->employment, true)
+                                    : [];
+                            @endphp
+
+                            {{-- Current Employment Section --}}
+                            @if (!empty($employment))
+                                <div class="mt-4">
+                                    <h3 class="font-semibold">Current Employment</h3>
+                                    <p><strong>Name of Employer:</strong>
+                                        {{ $employment['name_of_employer'] ?? 'N/A' }}</p>
+                                    <p><strong>Address:</strong> {{ $employment['address'] ?? 'N/A' }}</p>
+                                    <p><strong>Immediate Supervisor:</strong>
+                                        {{ $employment['immediate_supervisor'] ?? 'N/A' }}</p>
+                                    <p><strong>Position:</strong> {{ $employment['position'] ?? 'N/A' }}</p>
+                                    <p><strong>Contact Number:</strong> {{ $employment['contact_number'] ?? 'N/A' }}
+                                    </p>
+                                    <p><strong>Length of Service:</strong>
+                                        {{ $employment['length_of_service'] ?? 'N/A' }}</p>
+                                    <p><strong>Status of Employment:</strong>
+                                        {{ $employment['status_of_employment'] ?? 'N/A' }}</p>
+                                </div>
+                            @endif
+
+                            {{-- Past Employment Section --}}
+                            @if (!empty($employment['past_employment']))
+                                <div class="mt-4">
+                                    <h3 class="font-semibold">Past Employment</h3>
+                                    <p><strong>Company Name:</strong>
+                                        {{ $employment['past_employment']['company_name'] ?? 'N/A' }}</p>
+                                    <p><strong>Past Address:</strong>
+                                        {{ $employment['past_employment']['past_address'] ?? 'N/A' }}</p>
+                                </div>
+                            @endif
+
+                            {{-- If no employment data exists --}}
+                            @if (empty($employment))
+                                <p class="text-gray-500 mt-4">No employment details available.</p>
+                            @endif
+                        </main>
                     </main>
                 </div>
                 <div x-show="tab==='tab3'" class="text-base-500" style="display: none">
@@ -284,6 +335,66 @@
                     <main class="py-4">
                         <img src="" class="w-full h-auto" alt="">
                     </main>
+                </div>
+                <div x-show="tab==='tab7'" class="text-base-500" style="display: none">
+                    <main class="py-4">
+                        <h2 class="text-lg font-bold">Collateral Details</h2>
+
+                        @php
+                            // Ensure $getRecord() is not null and has 'loanInfo' before decoding
+                            $collateral = optional($getRecord()->loanInfo)->collateral
+                                ? json_decode($getRecord()->loanInfo->collateral, true)
+                                : [];
+                        @endphp
+
+                        {{-- Real Estate Section --}}
+                        @if (!empty($collateral['real_estate']))
+                            <div class="mt-4">
+                                <h3 class="font-semibold">Real Estate</h3>
+                                <p><strong>Title Holder:</strong>
+                                    {{ $collateral['real_estate']['title_holder'] ?? 'N/A' }}</p>
+                                <p><strong>Title Number:</strong> {{ $collateral['real_estate']['title_no'] ?? 'N/A' }}
+                                </p>
+                                <p><strong>Lot Number:</strong> {{ $collateral['real_estate']['lot_no'] ?? 'N/A' }}</p>
+                                <p><strong>Area:</strong> {{ $collateral['real_estate']['area'] ?? 'N/A' }} sq. m.</p>
+                                <p><strong>Location:</strong> {{ $collateral['real_estate']['location'] ?? 'N/A' }}</p>
+                            </div>
+                        @endif
+
+                        {{-- Motorcycle/Vehicle Section --}}
+                        @if (!empty($collateral['vehicle']))
+                            <div class="mt-4">
+                                <h3 class="font-semibold">Motorcycle/Vehicle</h3>
+                                <p><strong>Owner Name:</strong> {{ $collateral['vehicle']['owner_name'] ?? 'N/A' }}</p>
+                                <p><strong>Body Type:</strong> {{ $collateral['vehicle']['body_type'] ?? 'N/A' }}</p>
+                                <p><strong>Make:</strong> {{ $collateral['vehicle']['make'] ?? 'N/A' }}</p>
+                                <p><strong>Engine No:</strong> {{ $collateral['vehicle']['engine_no'] ?? 'N/A' }}</p>
+                                <p><strong>Chassis No:</strong> {{ $collateral['vehicle']['chassis_no'] ?? 'N/A' }}</p>
+                                <p><strong>Year Model:</strong> {{ $collateral['vehicle']['year_model'] ?? 'N/A' }}</p>
+                            </div>
+                        @endif
+
+                        {{-- ATM Section --}}
+                        @if (!empty($collateral['atm']))
+                            <div class="mt-4">
+                                <h3 class="font-semibold">ATM</h3>
+                                <p><strong>Account Name:</strong> {{ $collateral['atm']['account_name'] ?? 'N/A' }}</p>
+                                <p><strong>Bank Name:</strong> {{ $collateral['atm']['bank_name'] ?? 'N/A' }}</p>
+                                <p><strong>Account Source:</strong>
+                                    {{ isset($collateral['atm']['account_source']) && is_array($collateral['atm']['account_source'])
+                                        ? implode(', ', $collateral['atm']['account_source'])
+                                        : 'N/A' }}
+                                </p>
+                                <p><strong>Others:</strong> {{ $collateral['atm']['others'] ?? 'N/A' }}</p>
+                            </div>
+                        @endif
+
+                        {{-- If no collateral data exists --}}
+                        @if (empty($collateral))
+                            <p class="text-gray-500 mt-4">No collateral details available.</p>
+                        @endif
+                    </main>
+
                 </div>
             </div>
         </div>

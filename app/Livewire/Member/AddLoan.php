@@ -37,9 +37,24 @@ class AddLoan extends Component implements HasForms
 
     public $agriculture = [], $microfinance = [];
 
+    public $employment = [
+        'name_of_employer' => '',
+        'address' => '',
+        'immediate_supervisor' => '',
+        'position' => '',
+        'contact_number' => '',
+        'length_of_service' => '',
+        'status_of_employment' => '',
+        'past_employment' => [
+            'company_name' => '',
+            'past_address' => '',
+        ],
+    ];
+
     public $house_sketch = [];
     public $business = [[]];
     public $farming = [[]];
+    public $collateral = [];
     public function form(Form $form): Form
     {
         return $form
@@ -100,6 +115,60 @@ class AddLoan extends Component implements HasForms
                                     ]),
                                 ])
                                 ->columns(3)
+                        ])->columns(1),
+                        Fieldset::make('B. EMPLOYMENT')->schema([
+                            Grid::make(3)->schema([
+                                TextInput::make('employment.name_of_employer')
+                                    ->label('Name of Employer')
+                                    ->required()
+                                    ->live(),
+
+                                TextInput::make('employment.address')
+                                    ->label('Address')
+                                    ->required()
+                                    ->live(),
+
+                                TextInput::make('employment.immediate_supervisor')
+                                    ->label('Immediate Supervisor')
+                                    ->required()
+                                    ->live(),
+
+                                TextInput::make('employment.position')
+                                    ->label('Position')
+                                    ->required()
+                                    ->live(),
+
+                                TextInput::make('employment.contact_number')
+                                    ->label('Contact Number')
+                                    ->required()
+                                    ->live(),
+
+                                TextInput::make('employment.length_of_service')
+                                    ->label('Length of Service')
+                                    ->required()
+                                    ->live(),
+
+                                Radio::make('employment.status_of_employment')
+                                    ->label('Status of Employment')
+                                    ->options([
+                                        'Regular' => 'Regular',
+                                        'Contractual' => 'Contractual',
+                                    ])
+                                    ->required()
+                                    ->live(),
+                            ]),
+
+                            Fieldset::make('PAST EMPLOYMENT DETAILS')->schema([
+                                TextInput::make('employment.past_employment.company_name')
+                                    ->label('Company Name')
+                                    ->required()
+                                    ->live(),
+
+                                TextInput::make('employment.past_employment.past_address')
+                                    ->label('Past Address')
+                                    ->required()
+                                    ->live(),
+                            ])
                         ])->columns(1),
 
                         Fieldset::make('AMOUNT REQUESTED')->schema([
@@ -166,7 +235,58 @@ class AddLoan extends Component implements HasForms
                             ])
                             ->columns(3)->addActionLabel('Add New Information')
                     ])->columns(1),
-                Section::make('VI. HOUSE SKETCH')
+                Section::make('VI. COLLATERAL DETAIL')
+                    ->schema([
+                        Fieldset::make('REAL ESTATE')
+                            ->schema([
+                                TextInput::make('collateral.real_estate.title_holder')
+                                    ->label('Title Holder'),
+                                TextInput::make('collateral.real_estate.title_no')
+                                    ->label('Title Number'),
+                                TextInput::make('collateral.real_estate.lot_no')
+                                    ->label('Lot Number'),
+                                TextInput::make('collateral.real_estate.area')
+                                    ->label('Area (sq. m.)')
+                                    ->hint('sq. m.'),
+                                TextInput::make('collateral.real_estate.location')
+                                    ->label('Location'),
+                            ])->columns(3),
+
+                        Fieldset::make('MOTORCYCLE/VEHICLE')
+                            ->schema([
+                                TextInput::make('collateral.vehicle.owner_name')
+                                    ->label('Owner Name'),
+                                TextInput::make('collateral.vehicle.body_type')
+                                    ->label('Body Type'),
+                                TextInput::make('collateral.vehicle.make')
+                                    ->label('Make'),
+                                TextInput::make('collateral.vehicle.engine_no')
+                                    ->label('Engine Number'),
+                                TextInput::make('collateral.vehicle.chassis_no')
+                                    ->label('Chassis Number'),
+                                TextInput::make('collateral.vehicle.year_model')
+                                    ->label('Year Model'),
+                            ])->columns(3),
+
+                        Fieldset::make('ATM')
+                            ->schema([
+                                TextInput::make('collateral.atm.account_name')
+                                    ->label('Account Name'),
+                                TextInput::make('collateral.atm.bank_name')
+                                    ->label('Bank Name'),
+                                CheckboxList::make('collateral.atm.account_source')
+                                    ->label('Account Source')
+                                    ->options([
+                                        'Salary' => 'Salary',
+                                        'Pension' => 'Pension',
+                                        'Allotment' => 'Allotment',
+                                    ])->columns(2),
+                                TextInput::make('collateral.atm.others')
+                                    ->label('Other Sources')
+                                    ->columnSpan(2),
+                            ])->columns(3),
+                    ])->columns(1),
+                Section::make('VII. HOUSE SKETCH')
                     ->schema([
                         FileUpload::make('house_sketch')->label('')->required()
                     ])->columns(1),
@@ -210,6 +330,8 @@ class AddLoan extends Component implements HasForms
                 'spouse_income' => $this->spouse_income,
                 'total_expense' => $this->total_expense,
                 'total_uncommitted_income' => $this->total_uncommitted_income,
+                'collateral' => json_encode($this->collateral),
+                'employment' => json_encode($this->employment),
             ]);
 
             if ($this->photo) {

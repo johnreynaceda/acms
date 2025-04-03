@@ -57,7 +57,7 @@ class LoanApplication extends Component implements HasForms, HasTable
                         ->form([
                             ViewField::make('form')
                                 ->view('filament.forms.application')
-                        ]),
+                        ])->modalWidth('5xl'),
                     Action::make('approve')->visible(fn($record) => $record->status == 'pending')->icon('heroicon-m-hand-thumb-up')->color('success')->action(
                         function ($record) {
                             $record->update(['status' => 'approved']);

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -37,7 +36,9 @@ return new class extends Migration
             $table->json('agriculture')->nullable();
             $table->json('microfinance')->nullable();
             $table->json('business')->nullable();
+            $table->json('employment')->nullable();
             $table->json('farming')->nullable();
+            $table->json('collateral')->nullable();
             $table->string('house_sketch_path')->nullable();
             $table->timestamps();
         });
